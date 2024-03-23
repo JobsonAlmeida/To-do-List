@@ -9,6 +9,14 @@
     const lis = ul.getElementsByTagName("li")
 
 
+    function addEventLi(li){
+
+        li.addEventListener("click",  function(e){
+            console.log(this)
+
+        })
+
+    }
 
     function addTask(task){
         const li = document.createElement("li")        
@@ -22,10 +30,9 @@
 
         ul.appendChild(li)
 
-        li.addEventListener("click",  function(e){
-            console.log(this)
-            
-        })
+        addEventLi(li)
+
+      
 
     }
 
@@ -47,10 +54,8 @@
 
     });
 
-    [...lis].forEach(element => {
-        element.addEventListener("click", function(e){
-            console.log(this)
-        })
+    [...lis].forEach(li => {
+        addEventLi(li)
     });
 
 })()

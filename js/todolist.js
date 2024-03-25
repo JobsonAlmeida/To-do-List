@@ -6,7 +6,7 @@
     const itemInput = document.getElementById("item-input")
     const todoAddForm = document.getElementById("todo-add")
     const ul = document.getElementById("todo-list")
-    // const lis = ul.getElementsByTagName("li")
+    const lis = ul.getElementsByTagName("li")
 
     let arrTasks = [
         {
@@ -14,17 +14,27 @@
             createdAt: Date.now(),
             completed: false
 
+        },
+        {
+            name: "task 2",
+            createdAt: Date.now(),
+            completed: false
+
         }
     ]
 
-    function addEventLi(li){
+    // function addEventLi(li){
 
-        li.addEventListener("click",  function(e){
-            console.log(this)
+    //     li.addEventListener("click",  function(e){
+    //         console.log(this)
 
-        })
+    //     })
 
-    }
+    // }
+
+
+
+
 
     function generateLiTask(obj){
 
@@ -32,12 +42,14 @@
         const p = document.createElement("p") 
         const  checkButton = document.createElement("button")
         const editButton = document.createElement("i")
-        const deletebutton = document.createElement("i")
+        const deleteButton = document.createElement("i")
 
+        
         li.className = "todo-item"
 
         checkButton.className = "button-check"
         checkButton.innerHTML = "<i class=\"fas fa-check displayNone\"></i>"
+        checkButton.setAttribute("data-action", "checkButton")
 
         li.appendChild(checkButton)
         
@@ -46,7 +58,8 @@
 
         li.appendChild(p)
 
-        editButton.className = "fas fa-edit" 
+        editButton.className = "fas fa-edit"
+        editButton.setAttribute("data-action", "editButton") 
         li.appendChild(editButton)
 
         const containerEdit = document.createElement("div")
@@ -58,22 +71,25 @@
         const containerEditButton = document.createElement("button")
         containerEditButton.className = "editButton"
         containerEditButton.textContent = "Edit"
+        containerEditButton.setAttribute("data-action", "containerEditButton")
         containerEdit.appendChild(containerEditButton)
         const containerCancelButton = document.createElement("button")
         containerCancelButton.className = "cancelButton"
         containerCancelButton.textContent = "Cancel"
+        containerCancelButton.setAttribute("data-action", "containerCancelButton")
         containerEdit.appendChild(containerCancelButton)
         li.appendChild(containerEdit)
 
 
 
 
-        deletebutton.className = "fas fa-trash-alt"
-        li.appendChild(deletebutton)
+        deleteButton.className = "fas fa-trash-alt"
+        deleteButton.setAttribute("data-action", "deleteButton" )
+        li.appendChild(deleteButton)
 
 
 
-        addEventLi(li)
+        // addEventLi(li)
 
         return li
    
@@ -100,6 +116,45 @@
       
     }
 
+    function clickedUl(e){
+        const dataAction = e.target.getAttribute("data-action")
+        // console.log(lis)
+
+        if(!dataAction){
+            return
+        }
+
+        let currentLi = e.target        
+        while(currentLi.nodeName !== "LI"){
+            currentLi = currentLi.parentElement
+        }
+
+        console.log(currentLi)
+
+        const currentLiIndex = [...lis].indexOf(currentLi)
+        console.log(currentLiIndex)
+
+        const actions = {
+            editButton: function(){
+                console.log("editButton no objeto")
+            },
+            cancelButton: function(){
+                console.log("cancel button no objeto")
+            }
+        }
+
+        if(actions[dataAction]){
+            actions[dataAction]()
+    
+        }
+    
+    }
+
+  
+
+    
+
+  
     todoAddForm.addEventListener("submit", function(e){
         e.preventDefault()
 
@@ -120,6 +175,8 @@
 
     });
 
+
+    ul.addEventListener("click", clickedUl)
     
     renderTasks()
 

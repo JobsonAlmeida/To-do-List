@@ -18,7 +18,7 @@
         {
             name: "task 2",
             createdAt: Date.now(),
-            completed: false
+            completed: true
 
         }
     ]
@@ -45,10 +45,13 @@
         const deleteButton = document.createElement("i")
 
         
+       
         li.className = "todo-item"
 
         checkButton.className = "button-check"
-        checkButton.innerHTML = "<i class=\"fas fa-check displayNone\"></i>"
+        checkButton.innerHTML = `
+        <i class=\"fas fa-check ${obj.completed? "": "displayNone" }" data-action="checkButton"></i>`
+
         checkButton.setAttribute("data-action", "checkButton")
 
         li.appendChild(checkButton)
@@ -67,6 +70,8 @@
         const inputEdit = document.createElement("input")
         inputEdit.setAttribute("type", "text")
         inputEdit.className = "editInput"
+        inputEdit.value = obj.name
+
         containerEdit.appendChild(inputEdit)
         const containerEditButton = document.createElement("button")
         containerEditButton.className = "editButton"
@@ -118,29 +123,76 @@
 
     function clickedUl(e){
         const dataAction = e.target.getAttribute("data-action")
-        // console.log(lis)
+
+        console.log(e.target)
 
         if(!dataAction){
             return
         }
 
-        let currentLi = e.target        
+        let currentLi = e.target  
+
         while(currentLi.nodeName !== "LI"){
             currentLi = currentLi.parentElement
         }
 
-        console.log(currentLi)
-
         const currentLiIndex = [...lis].indexOf(currentLi)
-        console.log(currentLiIndex)
 
         const actions = {
             editButton: function(){
-                console.log("editButton no objeto")
             },
-            cancelButton: function(){
-                console.log("cancel button no objeto")
+            deleteButton: function(){
+                arrTasks.splice(currentLiIndex, 1)
+                renderTasks()
+            },
+            editButton: function(){
+                console.log("entrou")
+                const editContainer = currentLi.querySelector(".editContainer");
+                
+                [...ul.querySelectorAll(".editContainer")].forEach(container => {
+                    // container.removeAttribute("style")
+                    container.style.display = "none"
+                })
+
+                // editContainer.querySelector(".editInput").value = currentLi.querySelector(".task-name").textContent
+
+                editContainer.style.display = "flex";                
+   
+            },
+            containerEditButton: function(){
+                
+
+                const val = currentLi.querySelector(".editInput").value
+
+
+                arrTasks[currentLiIndex].name = val
+
+                renderTasks()
+
+            },
+            containerCancelButton: function(){
+
+                const editContainer = currentLi.querySelector(".editContainer");
+                editContainer.style.display = "none";   
+
+                // currentLi.querySelector(".editInput").val = currentLi.querySelector(".task-name").textContent
+
+                currentLi.querySelector(".editInput").value = arrTasks[currentLiIndex].name
+            },
+            checkButton: function(){
+                arrTasks[currentLiIndex].completed = !arrTasks[currentLiIndex].completed 
+
+                if(arrTasks[currentLiIndex].completed){
+                    currentLi.querySelector('.fa-check').classList.remove("displayNone")
+                }
+                else{
+                    currentLi.querySelector('.fa-check').classList.add("displayNone")
+                }
+
+                renderTasks()
+
             }
+
         }
 
         if(actions[dataAction]){

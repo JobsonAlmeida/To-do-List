@@ -10,7 +10,7 @@ The goal to this exercise was receive a hmtl and css code from a to-do list page
 
 To-do list is system where through its web page we can set, delete and edit tasks. Below is screen from this project.
 
-![](./images/to-do-list.jpg)
+![to-do-list](./images/to-do-list.jpg)
 
 
 

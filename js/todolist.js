@@ -8,20 +8,7 @@
     const ul = document.getElementById("todo-list")
     const lis = ul.getElementsByTagName("li")
 
-    let arrTasks = [
-        {
-            name: "task 1",
-            createdAt: Date.now(),
-            completed: false
-
-        },
-        {
-            name: "task 2",
-            createdAt: Date.now(),
-            completed: true
-
-        }
-    ]
+    let arrTasks = getSavedData()
 
     // function addEventLi(li){
 
@@ -34,7 +21,38 @@
 
 
 
+    function getSavedData(){
 
+        let tasksData =  localStorage.getItem("tasks")
+        tasksData = JSON.parse(tasksData)
+        console.log(tasksData)
+
+        return tasksData && tasksData.length ? tasksData :  [
+            {
+                name: "task 1",
+                createdAt: Date.now(),
+                completed: false    
+            },
+            {
+                name: "task 2",
+                createdAt: Date.now(),
+                completed: true    
+            },
+            {
+                name: "task 3",
+                createdAt: Date.now(),
+                completed: true    
+            }
+        ]
+
+    }
+
+
+    function setNewData(){
+        localStorage.setItem("tasks", JSON.stringify(arrTasks))
+    }
+
+    setNewData()
 
     function generateLiTask(obj){
 
@@ -43,8 +61,6 @@
         const  checkButton = document.createElement("button")
         const editButton = document.createElement("i")
         const deleteButton = document.createElement("i")
-
-        
        
         li.className = "todo-item"
 
@@ -86,8 +102,6 @@
         li.appendChild(containerEdit)
 
 
-
-
         deleteButton.className = "fas fa-trash-alt"
         deleteButton.setAttribute("data-action", "deleteButton" )
         li.appendChild(deleteButton)
@@ -118,13 +132,15 @@
             completed: false
 
         })
+
+        setNewData()
       
     }
 
     function clickedUl(e){
         const dataAction = e.target.getAttribute("data-action")
 
-        console.log(e.target)
+        
 
         if(!dataAction){
             return
@@ -132,9 +148,11 @@
 
         let currentLi = e.target  
 
-        while(currentLi.nodeName !== "LI"){
+        while(currentLi.nodeName != "LI"){       
             currentLi = currentLi.parentElement
         }
+
+        console.log("currentLi: ", currentLi)
 
         const currentLiIndex = [...lis].indexOf(currentLi)
 
@@ -144,6 +162,7 @@
             deleteButton: function(){
                 arrTasks.splice(currentLiIndex, 1)
                 renderTasks()
+                setNewData()
             },
             editButton: function(){
                 console.log("entrou")
@@ -159,15 +178,11 @@
                 editContainer.style.display = "flex";                
    
             },
-            containerEditButton: function(){
-                
-
+            containerEditButton: function(){               
                 const val = currentLi.querySelector(".editInput").value
-
-
                 arrTasks[currentLiIndex].name = val
-
                 renderTasks()
+                setNewData()
 
             },
             containerCancelButton: function(){
@@ -190,6 +205,7 @@
                 }
 
                 renderTasks()
+                setNewData()
 
             }
 

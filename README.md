@@ -8,7 +8,7 @@ This is was a mini project made from the course [Curso de JavaScript Completo](h
 
 The goal to this mini project was receive a hmtl and css code from a to-do list page and perform the functioncionalties using DOM manipulation through javascript language and also saving the data into localStorage. 
 
-To-do list is system where through its web page we can set, delete and edit tasks. Below is a screenshot of this project's web page
+To-do list is system where through its web page the user can set, delete and edit tasks. Below is a screenshot of this project's web page
 
 <p align="center">
 <img src="./images/to-do-list.jpg">
